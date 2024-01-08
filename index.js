@@ -3,6 +3,7 @@ const myLibrary = [
 ];
 
 const cards = document.querySelector(".cards");
+const modal = document.querySelector("dialog");
 
 document.querySelector(".add-button").addEventListener('click', (event) => {
     const title = document.querySelector("#title").value;
@@ -26,8 +27,15 @@ document.querySelector(".add-button").addEventListener('click', (event) => {
     displayBooks(checkStatus);
     addToggleFunction(newId, title);
     addDeleteFunction(newId, title);
+    modal.close();
 
     event.preventDefault();
+})
+
+const addButton = document.querySelector(".new-book-button");
+
+addButton.addEventListener('click' , () => {
+    modal.showModal();
 })
 
 function Book(id, title, author, pages, status) {
