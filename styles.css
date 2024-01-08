@@ -1,0 +1,24 @@
+.cards {
+    display: flex;
+    gap: 5px;
+}
+
+.card {
+    background-color: rgba(0, 0, 0, 0.416);
+}
+
+.title {
+    color: pink;
+}
+
+.author {
+    color: lightblue;
+}
+
+.pages {
+    color: lightgreen
+}
+
+.status {
+    color: green;
+}
