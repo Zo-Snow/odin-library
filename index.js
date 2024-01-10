@@ -1,123 +1,95 @@
-const myLibrary = [
-    // {id: 0, title: 'MDZS', author: 'Mo Xiang Tong Xiu', pages: 396, status: 'Read'},  
-];
+const myLibrary = [];
 
-const cards = document.querySelector(".cards");
-const modal = document.querySelector("dialog");
+const addButton = document.querySelector(".add-button");
+const newBookButton = document.querySelector(".new-book-button");
 
-document.querySelector(".add-button").addEventListener('click', (event) => {
+newBookButton.addEventListener('click', (event) => {
+    const dialog = document.querySelector("dialog");
+    dialog.showModal()
+})
+
+addButton.addEventListener('click', (event) => {
+    const [ title, author, pages, status ] = getDetails();
+
+    if (title != "" && author && pages != "" && parseInt(pages) < 10000) {
+       addBookToLibrary();
+       displayBooks(); 
+    }
+})
+
+checkEmpty();
+
+function checkEmpty() {
+    const emptyDiv = document.querySelector(".empty");
+    if (myLibrary.length === 0) {
+        emptyDiv.removeAttribute("hidden");
+    } else {
+        emptyDiv.setAttribute("hidden", true);
+    }
+}
+
+function Book(title, author, pages, status) {
+    this.title = title,
+    this.author = author,
+    this.pages = pages,
+    this.status = status
+  }
+
+function getDetails() {
     const title = document.querySelector("#title").value;
     const author = document.querySelector("#author").value;
     const pages = document.querySelector("#pages").value;
-    const checkStatus = document.querySelector("#status").checked;
-    let status = document.querySelector("#status").checked;
-
-    if (status === true) {
-        status = "Status: Read";
-    } else {
-        status = "Status: Not read yet";
-    }
-
-    let newId = myLibrary.length;
-
-    console.log(`${title}, ${author}, ${pages}, ${status}`);
-    let newBook = new Book(newId, title, author, pages, status);
-    myLibrary.push(newBook);
-    document.querySelector("form").reset();
-    displayBooks(checkStatus);
-    addToggleFunction(newId, title);
-    addDeleteFunction(newId, title);
-    modal.close();
-
-    event.preventDefault();
-})
-
-const addButton = document.querySelector(".new-book-button");
-
-addButton.addEventListener('click' , () => {
-    modal.showModal();
-})
-
-function Book(id, title, author, pages, status) {
-    this.id = id;
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.status = status;
+    const status = document.querySelector("#status").checked;
+    return [title, author, pages, status];
+}
+  
+function addBookToLibrary() {
+      const [ title, author, pages, status ] = getDetails();
+      const newBook = new Book(title, author, pages, status);
+      myLibrary.push(newBook);
 }
 
-function addElementProperties(name, className, text, appendTo) {
-    name.classList = className;
-    name.textContent = text;
-    appendTo.appendChild(name);
-}
-
-function displayBooks(status) {
-
-    const card = document.createElement('div');
-    const p1 = document.createElement('p');
-    const p2 = document.createElement('p');
-    const p3 = document.createElement('p');
-    const p4 = document.createElement('p');
-    const newInput = document.createElement('input');
-    const newButton = document.createElement('button');
-
-    myLibrary.forEach((book) => {
-
-        card.setAttribute("id", `card-${book.id}-${book.title}`);
-        
-        addElementProperties(card, "card", "", cards); 
-        addElementProperties(p1, "title", book.title, card);    
-        addElementProperties(p2, "author", book.author, card);     
-        addElementProperties(p3, "pages", book.pages, card);      
-        addElementProperties(p4, "status", book.status, card);
-        p4.setAttribute("id", `status-${book.id}-${book.title}`);
-
-        newInput.setAttribute("name", `status-toggle-${book.id}-${book.title}`);
-        newInput.setAttribute("type", "checkbox");
-        newInput.setAttribute("id", `status-toggle-${book.id}-${book.title}`);
-        newInput.setAttribute("aria-label", "toggle read status" ); 
-        newInput.setAttribute("class", "toggle-inputs" ); 
-        if (status === true) {
-            newInput.setAttribute("checked", true); 
-        } 
-        card.appendChild(newInput);
-
-        newButton.textContent = "Delete";
-        newButton.setAttribute("id", `delete-${book.id}-${book.title}`);
-        card.appendChild(newButton);
+function addToggleFunction() {
+    const buttons = document.querySelectorAll(".toggle-button");
+    buttons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            myLibrary[index].status = !myLibrary[index].status;
+            displayBooks();
+        })
     })
 }
 
-function addToggleFunction(id, title) {
-    const toggle = document.querySelector(`#status-toggle-${id}-${title}`);
-
-    let currentToggle = toggle.id.slice(14).split("-");
-    let neededId = currentToggle[0];
-    let neededTitle = currentToggle[1];
-    let currentPara = document.querySelector(`#status-${neededId}-${neededTitle}`);
-
-    toggle.addEventListener('click', () => {
-    if (toggle.checked === true) {
-        currentPara.textContent = "Status: Read";
-    } else {
-        currentPara.textContent = "Status: Not read yet.";
-    }})}
-
-function addDeleteFunction(id, title) {
-    const button = document.querySelector(`#delete-${id}-${title}`);
-    button.addEventListener('click', (event) => { 
-
-        let currentCard = document.querySelector(`#card-${id}-${title}`);
-        currentCard.remove();
-
-        myLibrary.forEach((book) => {
-            if (book.id === id && book.title === title) {
-                const index = myLibrary.indexOf(book);
-                const x = myLibrary.splice(index, 1);
-            }
-        });
-        event.preventDefault();
+function addDeleteFunction() {
+    const buttons = document.querySelectorAll(".delete");
+    buttons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            myLibrary.splice(index, 1);
+            displayBooks();
+        })
     })
+}
+
+function displayBooks() {
+    const cards = document.querySelector(".cards");
+    cards.innerHTML = "";
+
+    myLibrary.forEach((book, index) => {
+        let card = document.createElement('div');
+        card.classList = "card"; 
+        card.innerHTML = `
+        <p class="title">${book.title}</p>
+        <p class="author">by ${book.author}</p>
+        <p class="pages">Pages: ${book.pages}</p>
+        <div class="status-row">
+          <p class="status">Status: ${book.status ? "Read" : "Not read yet"}</p>
+          <button class="toggle-button" style="background-color: ${book.status ? "rgb(133, 230, 133);" : "rgb(234, 95, 95);"}"></button>
+        </div>
+        <button class="delete">Delete</button>
+        `;
+        cards.appendChild(card);
+    })
+    addToggleFunction();
+    addDeleteFunction();
+    checkEmpty();
 }
 
