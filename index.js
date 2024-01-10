@@ -9,22 +9,25 @@ newBookButton.addEventListener('click', (event) => {
 })
 
 addButton.addEventListener('click', (event) => {
-    const [ title, author, pages, status ] = getDetails();
+    let [ title, author, pages, status ] = getDetails();
+    const form = document.querySelector("form");
 
-    if (title != "" && author && pages != "" && parseInt(pages) < 10000) {
+    if (title != "" && author && pages != "") {
        addBookToLibrary();
        displayBooks(); 
+       form.reset();
+    } else {
+        alert("Book not added. To add a book provide all required fields followed by an asterik *");
+        form.reset();
     }
 })
-
-checkEmpty();
 
 function checkEmpty() {
     const emptyDiv = document.querySelector(".empty");
     if (myLibrary.length === 0) {
-        emptyDiv.removeAttribute("hidden");
+        emptyDiv.style.display = 'flex';
     } else {
-        emptyDiv.setAttribute("hidden", true);
+        emptyDiv.style.display = 'none';
     }
 }
 

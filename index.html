@@ -16,16 +16,16 @@
     <dialog>
         <form method="dialog">
             <div class="row">
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" maxlength="100"  required>
+                <label for="title">Title*</label>
+                <input type="text" name="title" id="title" maxlength="100" >
             </div>
             <div class="row">
-                <label for="author">Author</label>
-                <input type="text" name="author" id="author" maxlength="100"  required>
+                <label for="author">Author*</label>
+                <input type="text" name="author" id="author" maxlength="100" >
             </div>
             <div class="row">
-                <label for="pages">Pages</label>
-                <input type="number" name="pages" id="pages" max="10000" required>
+                <label for="pages">Pages*</label>
+                <input type="number" name="pages" id="pages" >
             </div>
             <div class="row">
                 <label for="status">Have you read it?</label>
@@ -39,7 +39,7 @@
 
     <button class="new-book-button">Add a book</button>
 
-    <div class="empty" hidden>
+    <div class="empty">
         <h2>Nothing to display, library is empty. Add some books?</h2>
     </div>
 
