@@ -138,6 +138,7 @@ dialog {
 .pages {
     padding: 0px 10px 0px 10px;
     color: #857073;
+    text-align: start;
 }
 
 .status {
