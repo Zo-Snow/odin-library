@@ -31,12 +31,14 @@ function checkEmpty() {
     }
 }
 
-function Book(title, author, pages, status) {
-    this.title = title,
-    this.author = author,
-    this.pages = pages,
-    this.status = status
-  }
+class createBook {
+    constructor (title, author, pages, status) {
+        this.title = title,
+        this.author = author,
+        this.pages = pages,
+        this.status = status
+    }
+}
 
 function getDetails() {
     const title = document.querySelector("#title").value;
@@ -48,7 +50,7 @@ function getDetails() {
   
 function addBookToLibrary() {
       const [ title, author, pages, status ] = getDetails();
-      const newBook = new Book(title, author, pages, status);
+      const newBook = new createBook(title, author, pages, status);
       myLibrary.push(newBook);
 }
 
